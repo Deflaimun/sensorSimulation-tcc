@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static Util.Constantes.*;
 
-public class enviaSensor extends SpringBeanAutowiringSupport {
+public class EnviaSensor extends SpringBeanAutowiringSupport {
 
     @Autowired
     private ServicosDeSensores servicosDeSensores;
@@ -22,8 +22,6 @@ public class enviaSensor extends SpringBeanAutowiringSupport {
         Sensor sensor = new Sensor(SENSOR_TEMPERATURA, new ArrayList<>(), "MQTT");
         servicosDeSensores.geraDadosDouble(sensor,BASE_TEMPERATURA_CORPO,VARIACAO_TEMPERATURA_CORPO);
         servicosdeMQTT.enviaMQTT(sensor);
-
-
 
     }
 }
