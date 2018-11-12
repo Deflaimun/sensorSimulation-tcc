@@ -5,10 +5,10 @@ import java.util.List;
 public class Sensor {
 
     private String nome;
-    private List<?> data;
+    private List<String> data;
     private Object canal;
 
-    public Sensor(String nome, List<?> data, Object canal) {
+    public Sensor(String nome, List<String> data, Object canal) {
         this.nome = nome;
         this.data = data;
         this.canal = canal;
@@ -40,11 +40,11 @@ public class Sensor {
         this.canal = canal;
     }
 
-    public List<?> getData() {
+    public List<String> getData() {
         return data;
     }
 
-    public void setData(List<?> data) {
+    public void setData(List<String> data) {
         this.data = data;
     }
 }

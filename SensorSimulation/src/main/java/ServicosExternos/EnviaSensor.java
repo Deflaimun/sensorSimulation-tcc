@@ -18,10 +18,15 @@ public class EnviaSensor extends SpringBeanAutowiringSupport {
     @Autowired
     private ServicosDeMQTT servicosdeMQTT;
 
-    public void enviaDadosSensor(){
+    public String enviaDadosSensor(){
         Sensor sensor = new Sensor(SENSOR_TEMPERATURA, new ArrayList<>(), "MQTT");
         servicosDeSensores.geraDadosDouble(sensor,BASE_TEMPERATURA_CORPO,VARIACAO_TEMPERATURA_CORPO);
-        servicosdeMQTT.enviaMQTT(sensor);
+        if(servicosdeMQTT.enviaMQTT(sensor)){
+            return "Serviço iniciado com sucesso";
+        }
+        else{
+            return "Erro na inicialização do serviço";
+        }
 
     }
 }
