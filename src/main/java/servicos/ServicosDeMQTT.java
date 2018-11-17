@@ -1,6 +1,6 @@
-package Servicos;
+package servicos;
 
-import Modelo.Sensor;
+import modelo.Sensor;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
@@ -8,29 +8,27 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.stereotype.Service;
 
+import static util.Constantes.*;
+
 @Service
 public class ServicosDeMQTT {
 
     public boolean enviaMQTT(Sensor sensor){
 
-        String topic        = "MQTT Examples";
-        String content      = "Message from MqttPublishSample";
+        String topic        = "Sensor de " + sensor.getNome();
         int qos             = 2;
-        String broker       = "tcp://m15.cloudmqtt.com:19300";
-        String clientId     = "bqsluijc";
         MemoryPersistence persistence = new MemoryPersistence();
-        char[] password = {	'A','y','C','B','m','r','-','O','F','t','J','4'};
 
         try {
-            MqttClient sampleClient = new MqttClient(broker, clientId, persistence);
+            MqttClient sampleClient = new MqttClient(BROKER, CLIENTID, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setUserName(clientId);
-            connOpts.setPassword(password);
+            connOpts.setUserName(CLIENTID);
+            connOpts.setPassword(PASSWORDBROKER);
             connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: "+broker);
+            System.out.println("Connecting to broker: "+BROKER);
             sampleClient.connect(connOpts);
             System.out.println("Connected");
-            System.out.println("Publishing message: "+content);
+            System.out.println("Publishing message: ");
             MqttMessage message;
 
             for (int i = 0; i < sensor.getData().size(); i++) {
@@ -38,11 +36,9 @@ public class ServicosDeMQTT {
                 message.setQos(qos);
 
                 sampleClient.publish(topic, message);
-                System.out.println("Message published");
             }
             sampleClient.disconnect();
             System.out.println("Disconnected");
-            System.exit(0);
             return true;
         } catch(MqttException me) {
             System.out.println("reason "+me.getReasonCode());

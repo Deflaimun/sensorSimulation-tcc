@@ -1,4 +1,4 @@
-package Modelo;
+package modelo;
 
 import java.util.List;
 
@@ -6,18 +6,24 @@ public class Sensor {
 
     private String nome;
     private List<String> data;
+    private String unidade;
     private Object canal;
 
-    public Sensor(String nome, List<String> data, Object canal) {
+    public Sensor(String nome, List<String> data, String unidade, Object canal) {
         this.nome = nome;
         this.data = data;
+        this.unidade = unidade;
         this.canal = canal;
     }
 
-    public Sensor(String nome, Object canal) {
-        this.nome = nome;
-        this.canal = canal;
+    public String getUnidade() {
+        return unidade;
     }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
+    }
+
 
     public Sensor(Object canal) {
         this.canal = canal;
