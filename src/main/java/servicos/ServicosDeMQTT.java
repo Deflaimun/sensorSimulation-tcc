@@ -15,7 +15,7 @@ public class ServicosDeMQTT {
 
     public boolean enviaMQTT(Sensor sensor){
 
-        String topic        = "Sensor de " + sensor.getNome();
+        String topic        = "Sensor " + sensor.getNome();
         int qos             = 2;
         MemoryPersistence persistence = new MemoryPersistence();
 
