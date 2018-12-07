@@ -8,29 +8,50 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static util.Constantes.*;
 
 @Service
 public class ServicosDeMQTT {
 
-    public boolean enviaMQTT(Sensor sensor){
+    private static MqttClient sampleClient;
+    private static MqttConnectOptions connOpts;
+    private final AtomicInteger contador = new AtomicInteger();
 
-        String topic        = "Sensor " + sensor.getNome();
-        int qos             = 2;
+    public ServicosDeMQTT() {
         MemoryPersistence persistence = new MemoryPersistence();
 
         try {
-            MqttClient sampleClient = new MqttClient(BROKER, CLIENTID, persistence);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setUserName(CLIENTID);
-            connOpts.setPassword(PASSWORDBROKER);
-            connOpts.setCleanSession(true);
-            System.out.println("Connecting to broker: "+BROKER);
-            sampleClient.connect(connOpts);
-            System.out.println("Connected");
+        sampleClient = new MqttClient(BROKER, CLIENTID, persistence);
+        connOpts = new MqttConnectOptions();
+        connOpts.setUserName(CLIENTID);
+        connOpts.setPassword(PASSWORDBROKER);
+        connOpts.setCleanSession(true);
+        System.out.println("Connecting to broker: "+BROKER);
+        sampleClient.connect(connOpts);
+        System.out.println("Connected");
+
+        } catch (MqttException me) {
+            System.out.println("reason "+me.getReasonCode());
+            System.out.println("msg "+me.getMessage());
+            System.out.println("loc "+me.getLocalizedMessage());
+            System.out.println("cause "+me.getCause());
+            System.out.println("excep "+me);
+            me.printStackTrace();
+        }
+
+
+    }
+
+    public boolean enviaMQTT(Sensor sensor){
+
+        String topic        = "Sensor " + sensor.getNome() + " " + contador.getAndIncrement();
+        int qos             = 2;
+
+        try {
             System.out.println("Publishing message: ");
             MqttMessage message;
-
             for (int i = 0; i < sensor.getData().size(); i++) {
                 message = new MqttMessage(sensor.getData().get(i).getBytes());
                 message.setQos(qos);
@@ -48,6 +69,10 @@ public class ServicosDeMQTT {
             System.out.println("excep "+me);
             me.printStackTrace();
             return false;
+        }
+        catch(Exception e ){
+            return false;
+
         }
     }
 }

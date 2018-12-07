@@ -17,7 +17,6 @@ public class SensorController {
     @Autowired
     private ServicosDeSensores servicosDeSensores;
 
-    @Autowired
     private ServicosDeMQTT servicosdeMQTT = new ServicosDeMQTT();
 
 
