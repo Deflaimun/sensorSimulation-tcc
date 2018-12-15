@@ -16,61 +16,54 @@ import static util.Constantes.*;
 public class ServicosDeMQTT {
 
     private static MqttClient sampleClient;
-    private static MqttConnectOptions connOpts;
     private final AtomicInteger contador = new AtomicInteger();
 
     public ServicosDeMQTT() {
         MemoryPersistence persistence = new MemoryPersistence();
+        MqttConnectOptions connOpts;
 
         try {
-        sampleClient = new MqttClient(BROKER, CLIENTID, persistence);
-        connOpts = new MqttConnectOptions();
-        connOpts.setUserName(CLIENTID);
-        connOpts.setPassword(PASSWORDBROKER);
-        connOpts.setCleanSession(true);
-        System.out.println("Connecting to broker: "+BROKER);
-        sampleClient.connect(connOpts);
-        System.out.println("Connected");
-
+            sampleClient = new MqttClient(BROKER, CLIENTID, persistence);
+            connOpts = new MqttConnectOptions();
+            connOpts.setUserName(CLIENTID);
+            connOpts.setPassword(PASSWORDBROKER);
+            connOpts.setCleanSession(true);
+            System.out.println("Connecting to broker: " + BROKER);
+            sampleClient.connect(connOpts);
+            System.out.println("Connected");
         } catch (MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
             me.printStackTrace();
         }
-
-
     }
 
-    public boolean enviaMQTT(Sensor sensor){
-
-        String topic        = "Sensor " + sensor.getNome() + " " + contador.getAndIncrement();
-        int qos             = 2;
+    public boolean enviaMQTT(Sensor sensor) {
+        String topic = "sensor/" + sensor.getTipo()
+                + "/" + contador.getAndIncrement();
+        int qos = 2;
 
         try {
-            System.out.println("Publishing message: ");
             MqttMessage message;
+
             for (int i = 0; i < sensor.getData().size(); i++) {
                 message = new MqttMessage(sensor.getData().get(i).getBytes());
                 message.setQos(qos);
-
                 sampleClient.publish(topic, message);
             }
-            sampleClient.disconnect();
-            System.out.println("Disconnected");
             return true;
-        } catch(MqttException me) {
-            System.out.println("reason "+me.getReasonCode());
-            System.out.println("msg "+me.getMessage());
-            System.out.println("loc "+me.getLocalizedMessage());
-            System.out.println("cause "+me.getCause());
-            System.out.println("excep "+me);
+        } catch (MqttException me) {
+            System.out.println("reason " + me.getReasonCode());
+            System.out.println("msg " + me.getMessage());
+            System.out.println("loc " + me.getLocalizedMessage());
+            System.out.println("cause " + me.getCause());
+            System.out.println("excep " + me);
             me.printStackTrace();
             return false;
-        }
-        catch(Exception e ){
+        } catch (Exception e) {
             return false;
 
         }

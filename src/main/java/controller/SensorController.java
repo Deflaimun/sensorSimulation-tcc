@@ -21,39 +21,36 @@ public class SensorController {
 
 
     @RequestMapping("/enviaDadosSensorTemperaturaMQTT")
-    public String enviaDadosSensorTemperaturaMQTT(){
-        Sensor sensor = new Sensor(SENSOR_TEMPERATURA, new ArrayList<>(),"Volts", "MQTT");
+    public String enviaDadosSensorTemperaturaMQTT() {
+        Sensor sensor = new Sensor(SENSOR_TEMPERATURA, new ArrayList<>(), "Volts", "MQTT", "temperatura");
         servicosDeSensores.geraDadosTemperatura(sensor);
-        if(servicosdeMQTT.enviaMQTT(sensor)){
+        if (servicosdeMQTT.enviaMQTT(sensor)) {
             return SUCESSO;
-        }
-        else{
+        } else {
             return FALHA;
         }
 
     }
 
     @RequestMapping("/enviaDadosSensorLuminosidadeMQTT")
-    public String enviaDadosSensorLuminosidadeMQTT(){
-        Sensor sensor = new Sensor(SENSOR_LUMINOSIDADE, new ArrayList<>(), "Sem unidade","MQTT");
+    public String enviaDadosSensorLuminosidadeMQTT() {
+        Sensor sensor = new Sensor(SENSOR_LUMINOSIDADE, new ArrayList<>(), "Sem unidade", "MQTT", "luminosidade");
         servicosDeSensores.geraLuminosidadeUmDia(sensor);
-        if(servicosdeMQTT.enviaMQTT(sensor)){
+        if (servicosdeMQTT.enviaMQTT(sensor)) {
             return SUCESSO;
-        }
-        else{
+        } else {
             return FALHA;
         }
 
     }
 
     @RequestMapping("/enviaDadosSensorPoluicaoMQTT")
-    public String enviaDadosSensorPoluicaoMQTT(){
-        Sensor sensor = new Sensor(SENSOR_POLUICAO, new ArrayList<>(), "Sem unidade","MQTT");
+    public String enviaDadosSensorPoluicaoMQTT() {
+        Sensor sensor = new Sensor(SENSOR_POLUICAO, new ArrayList<>(), "Sem unidade", "MQTT", "poluicao");
         servicosDeSensores.geraDadoPoluicao(sensor);
-        if(servicosdeMQTT.enviaMQTT(sensor)){
+        if (servicosdeMQTT.enviaMQTT(sensor)) {
             return SUCESSO;
-        }
-        else{
+        } else {
             return FALHA;
         }
 
